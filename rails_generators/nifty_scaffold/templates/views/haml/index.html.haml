@@ -5,6 +5,7 @@
     <%- for attribute in attributes -%>
     %th <%= attribute.column.human_name %>
     <%- end -%>
+
   - for <%= singular_name %> in @<%= plural_name %>
     %tr
       <%- for attribute in attributes -%>

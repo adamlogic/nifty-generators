@@ -52,12 +52,12 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
       end
     
       %w[index show new edit].each do |action|
-        should_generate_file "app/views/line_items/#{action}.html.erb"
+        should_generate_file "app/views/line_items/#{action}.html.haml"
       end
     
       should "have name attribute" do
-        assert_generated_file "app/views/line_items/_form.html.erb" do |body|
-          assert_match "<%= f.text_field :name %>", body
+        assert_generated_file "app/views/line_items/_form.html.haml" do |body|
+          assert_match "= f.text_field :name", body
         end
       end
       
@@ -95,7 +95,7 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with index action" do
       rails_generator :nifty_scaffold, "line_item", "index"
     
-      should_generate_file "app/views/line_items/index.html.erb"
+      should_generate_file "app/views/line_items/index.html.haml"
     
       should "generate controller with index action" do
         assert_generated_file "app/controllers/line_items_controller.rb" do |body|
@@ -109,7 +109,7 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with show action" do
       rails_generator :nifty_scaffold, "line_item", "show"
     
-      should_generate_file "app/views/line_items/show.html.erb"
+      should_generate_file "app/views/line_items/show.html.haml"
     
       should "generate controller with show action" do
         assert_generated_file "app/controllers/line_items_controller.rb" do |body|
@@ -122,12 +122,12 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with new and create actions" do
       rails_generator :nifty_scaffold, "line_item", "new", "create"
     
-      should_not_generate_file "app/views/line_items/create.html.erb"
-      should_not_generate_file "app/views/line_items/_form.html.erb"
+      should_not_generate_file "app/views/line_items/create.html.haml"
+      should_not_generate_file "app/views/line_items/_form.html.haml"
     
       should "render form in 'new' template" do
-        assert_generated_file "app/views/line_items/new.html.erb" do |body|
-          assert_match "<% form_for @line_item do |f| %>", body
+        assert_generated_file "app/views/line_items/new.html.haml" do |body|
+          assert_match "form_for @line_item do |f|", body
         end
       end
     
@@ -148,12 +148,12 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with edit and update actions" do
       rails_generator :nifty_scaffold, "line_item", "edit", "update"
     
-      should_not_generate_file "app/views/line_items/update.html.erb"
-      should_not_generate_file "app/views/line_items/_form.html.erb"
+      should_not_generate_file "app/views/line_items/update.html.haml"
+      should_not_generate_file "app/views/line_items/_form.html.haml"
     
       should "render form in 'edit' template" do
-        assert_generated_file "app/views/line_items/edit.html.erb" do |body|
-          assert_match "<% form_for @line_item do |f| %>", body
+        assert_generated_file "app/views/line_items/edit.html.haml" do |body|
+          assert_match "form_for @line_item do |f|", body
         end
       end
     
@@ -173,7 +173,7 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with edit and update actions" do
       rails_generator :nifty_scaffold, "line_item", "destroy"
     
-      should_not_generate_file "app/views/line_items/destroy.html.erb"
+      should_not_generate_file "app/views/line_items/destroy.html.haml"
     
       should "generate controller with action" do
         assert_generated_file "app/controllers/line_items_controller.rb" do |body|
@@ -189,12 +189,12 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
     context "generator with new and edit actions" do
       rails_generator :nifty_scaffold, "line_item", "new", "edit"
     
-      should_generate_file "app/views/line_items/_form.html.erb"
+      should_generate_file "app/views/line_items/_form.html.haml"
     
       should "render the form partial in views" do
         %w[new edit].each do |action|
-          assert_generated_file "app/views/line_items/#{action}.html.erb" do |body|
-            assert_match "<%= render :partial => 'form' %>", body
+          assert_generated_file "app/views/line_items/#{action}.html.haml" do |body|
+            assert_match "render :partial => 'form'", body
           end
         end
       end
@@ -204,10 +204,10 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
       rails_generator :nifty_scaffold, "line_item", "name:string", "new", "price:float", "index", "available:boolean"
     
       should "render a form field for each attribute in 'new' template" do
-        assert_generated_file "app/views/line_items/new.html.erb" do |body|
-          assert_match "<%= f.text_field :name %>", body
-          assert_match "<%= f.text_field :price %>", body
-          assert_match "<%= f.check_box :available %>", body
+        assert_generated_file "app/views/line_items/new.html.haml" do |body|
+          assert_match "f.text_field :name", body
+          assert_match "f.text_field :price", body
+          assert_match "f.check_box :available", body
         end
       end
     end
@@ -227,8 +227,8 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
       rails_generator :nifty_scaffold, "line_item", "foo:string", :skip_model => true
       
       should "use passed attribute" do
-        assert_generated_file "app/views/line_items/_form.html.erb" do |body|
-          assert_match "<%= f.text_field :foo %>", body
+        assert_generated_file "app/views/line_items/_form.html.haml" do |body|
+          assert_match "f.text_field :foo", body
         end
       end
       
@@ -277,7 +277,7 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
       rails_generator :nifty_scaffold, "line_item", :skip_controller => true
       should_not_generate_file "app/controllers/line_items_controller.rb"
       should_not_generate_file "app/helpers/line_items_helper.rb"
-      should_not_generate_file "app/views/line_items/index.html.erb"
+      should_not_generate_file "app/views/line_items/index.html.haml"
     end
     
     context "generator with --skip-migration" do
@@ -317,10 +317,10 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
         rails_generator :nifty_scaffold, "recipe", :skip_model => true
     
         should "use model columns for attributes" do
-          assert_generated_file "app/views/recipes/_form.html.erb" do |body|
-            assert_match "<%= f.text_field :foo %>", body
-            assert_match "<%= f.text_field :bar %>", body
-            assert_match "<%= f.text_field :book_id %>", body
+          assert_generated_file "app/views/recipes/_form.html.haml" do |body|
+            assert_match "f.text_field :foo", body
+            assert_match "f.text_field :bar", body
+            assert_match "f.text_field :book_id", body
             assert_no_match(/:id/, body)
             assert_no_match(/:created_at/, body)
             assert_no_match(/:updated_at/, body)
@@ -336,7 +336,7 @@ class TestNiftyScaffoldGenerator < Test::Unit::TestCase
         rails_generator :nifty_scaffold, "recipe", "zippo:string"
     
         should "use specified attribute" do
-          assert_generated_file "app/views/recipes/_form.html.erb" do |body|
+          assert_generated_file "app/views/recipes/_form.html.haml" do |body|
             assert_match "<%= f.text_field :zippo %>", body
           end
         end
